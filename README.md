@@ -6,31 +6,32 @@
 
 This project describes a custom extension for [Tasmota](https://github.com/arendst/Tasmota) lite firmware to build a gateway capable of receiving 433 MHz wireless temperature-humidity sensor data and sending it over MQTT to integrate into popular Home Automation systems.
 
-Flashing your ESP8266/ESP32 with this modified Tasmota firmware together with wireless temperature-humidity sensor support you will get more useful functions:
+Flashed with this custom Tasmota firmware your ESP8266/ESP32 device obtain new functionality:
+* Support of wireless temperature-humidity sensors
 * Network connectivity over WiFi
 * Web interface with Console
 * MQTT support
 * OTA firmware update
 * Integration into Home Automation systems
 
-This project uses the [Nexus_Decoder library](https://github.com/phpcoder/temperature-humidity-sensor-arduino) and requires a 433.92 MHz receiver module connected to one of the ESP8266/ESP32 GPIO pin. The SRX882 superheterodyne receiver module is recommended to obtain a reliable signal with minimum noise from its DATA pin (pin #5).
+This project uses the [Nexus_Decoder library](https://github.com/phpcoder/temperature-humidity-sensor-arduino) and requires an extra 433.92 MHz receiver connected to one of the ESP8266/ESP32 GPIO pin. The SRX882 superheterodyne receiver module is recommended to obtain a reliable signal with minimum noise from its DATA pin (pin #5).
 
 
 ## Installation and Building the Tasmota Firmware
 
-To start with, you need to install [PlatformIO](https://tasmota.github.io/docs/Compile-your-build/#compiling-tools) to your system. Then clone the Tasmota stable (preferred) branch to your local system. The process of making a [custom Tasmota build](https://tasmota.github.io/docs/Compile-your-build/#customize-your-build) is described in detail, but all necessary config files are included to this repository:
+To start with, you need to install [PlatformIO](https://tasmota.github.io/docs/Compile-your-build/#compiling-tools) to your system and clone a Tasmota stable (preferred) branch. The process of making a [custom Tasmota build](https://tasmota.github.io/docs/Compile-your-build/#customize-your-build) is described here in detail with all required custom config files included into this repository:
 
 * Copy provided [`/platformio_override.ini`](https://github.com/phpcoder/tasmota-nexus-mqtt/blob/main/platformio_override.ini) file to the cloned Tasmota project root folder
-	- provided config is made for [Wemos D1 mini ESP8266 board](https://www.wemos.cc/en/latest/d1/d1_mini_3.1.0.html), for other boards find and uncomment your board type name in `env` section
-	- set a serial port used for flashing your board as `upload_port` parameter
-	- optionally set proper `upload_speed`
+	- it is made for [Wemos D1 mini ESP8266 board](https://www.wemos.cc/en/latest/d1/d1_mini_3.1.0.html), for other boards uncomment your specific board type name in `env` section
+	- set your system's serial port connected to your board as `upload_port` parameter used for flashing your board and later for monitoring the serial data
+	- optionally set proper `upload_speed` (and optionally `monitor_speed`)
 * Copy [`/tasmota/user_config_override.h`](https://github.com/phpcoder/tasmota-nexus-mqtt/blob/main/tasmota/user_config_override.h) to the `/tasmota` folder
 	- enter your own WiFi/MQTT Broker **credentials**, MQTT Broker **host** and project **name**
 * Copy [`/tasmota/xdrv_103_nexus_mqtt.ino`](https://github.com/phpcoder/tasmota-nexus-mqtt/blob/main/tasmota/xdrv_103_nexus_mqtt.ino) to the `/tasmota` folder
-	- modify the MQTT topic if required for use with your preferred Home Automation System
-	- check that GPIO pin number is where your 433.92 MHz receiver module connected
+	- modify the MQTT topic as required for use with your preferred Home Automation System
+	- check the GPIO pin number where your 433.92 MHz receiver module is connected
 
-If all files are in the right place, compile your custom Tasmota firmware with a command `pio run`. If compilation is error free, connect your board to the serial port and upload a compiled firmware as 
+With all configuration in place, compile your custom Tasmota lite firmware with a command `pio run`. If compilation is error free, connect your board to the serial port and upload a compiled firmware as 
 
 ```
 pio run --target upload && pio device monitor
@@ -64,24 +65,28 @@ To be able to register only needed wireless sensors I created a flow using Node-
 
 ## Conclusion and Outlook
 
-After reading all that you may ask, how such a project may be useful? Why one needs to build a new 433Mhz to MQTT gateway when such devices as RFXCOM [RFXtrx](http://www.rfxcom.com/epages/78165469.sf/en_GB) tranceivers or Sonoff 433MHz [RFBridge](https://sonoff.tech/product/smart-home-security/rf-bridger2/) are available? Here are the problems I encoutered with RFXtrx:
+How this project can be useful? Why another 433Mhz to MQTT gateway if such devices as RFXCOM [RFXtrx](http://www.rfxcom.com/epages/78165469.sf/en_GB) or Sonoff 433MHz [RFBridge](https://sonoff.tech/product/smart-home-security/rf-bridger2/) are available?
+
+In my experience with using RFXtrx I encoutered a few problems:
 
 * RFXtrx433XL supports plenty of protocols, most of which are not needed. Still some needed protocols are not supported.
 * Official Firmware update and management software is available only under Windows. To update its firmware the RFXtrx433XL device should be disconnected from HA system.
 * Serial USB connection with HA server and the length of external antenna cable limits the location of the whole HA system with 433 MHz signal coverage.
-* RFXtrx433XL serial USB connection requires an additional powered USB hub as when connected to RPi directly, it draws too much current making system unstable.
+* RFXtrx433XL directly connected via USB to RPi draws too much current making system unstable. It requires an additional powered USB hub for stable operation. 
 * The use of RFXtrx device requires an extra intregration to Home Assistant in addition to the existing MQTT integration.
 * After all, the RFXtrx433XL is expensive and costs even more than RPi4.
 
-I tried also to use Sonoff 433MHz RFBridge, otherwise a very useful hardware, but with serious limitations:
+I tried also Sonoff 433MHz RFBridge, a very useful hardware, however with serious limitations:
 
-* It requires some hardware mods to work with custom firmware and extend protocols.
-* It has a very limited list of supported protocols, e.g. not possible to see the devices described in this project.
-* It uses small internal antennas that limit the range of RF reception.
+* It requires some hardware mods to work with custom firmware and extra protocols.
+* It has a very limited list of supported protocols, e.g. wireless temperature-humidity sensors described in this project are not supported.
+* It uses small internal antennas that limit the RF coverage.
 
-In both solutions I do not need a transmission capability, only receiving is required. Finally, there are projects that offer similar functionality as the described one, most notably [OpenMQTTGateway](https://docs.openmqttgateway.com/). I found that if used with Home Assistant OpenMQTTGateway attempts automatically register all available devices it can ever recognize, even those belonging to the nearby households. When you change batteries in wireless temperature sensors, they change their IDs to another random number, and the amount of automatically registered devices is growing exponentially.
+Additionally, in both solutions I do not need a transmission capability, only receiving is required. 
 
-The described project serves as another example of the [custom integration into Tasmota firmware](https://github.com/phpcoder/tasmota-custom-integration). For simplicity it describes only a single protocol gateway. Other repositories will include example of 433MHz to MQTT gateways with more supported protocols as used in my HA system.
+Finally, there are projects offering similar functionality, most notably [OpenMQTTGateway](https://docs.openmqttgateway.com/). I found that OpenMQTTGateway used with Home Assistant attempts to register automatically all available devices it can ever recognize, including those belonging to the nearby households. When batteries in wireless temperature sensors are changed, they change their IDs to another random number, and the amount of automatically registered devices is growing exponentially.
+
+The described project serves as another example of the [custom integration into Tasmota firmware](https://github.com/phpcoder/tasmota-custom-integration). For simplicity it describes only a single protocol gateway. I am planning to publish more examples of 433MHz to MQTT gateways with more supported protocols as used in my HA system.
 
 
 
