@@ -14,7 +14,7 @@ Flashed with this custom Tasmota firmware your ESP8266/ESP32 device obtain new f
 * OTA firmware update
 * Integration into Home Automation systems
 
-This project uses the [Nexus_Decoder library](https://github.com/phpcoder/temperature-humidity-sensor-arduino) and requires an extra 433.92 MHz receiver connected to one of the ESP8266/ESP32 GPIO pin. The SRX882 superheterodyne receiver module is recommended to obtain a reliable signal with minimum noise from its DATA pin (pin #5).
+This project uses the [Nexus_Decoder library](https://github.com/phpcoder/temperature-humidity-sensor-arduino) and requires an extra 433.92 MHz receiver connected to one ESP8266/ESP32 GPIO pin. The SRX882 superheterodyne receiver module is recommended to obtain a reliable signal with minimum noise from its DATA pin (pin #5).
 
 
 ## UPD Apr 2, 2024
@@ -42,9 +42,9 @@ After some trials a better solution to build a temperature-humidity monitoring n
 * longer battery lifetime, about a year compared to 4-6 months of 433.92 MHz sensors
 * no need to change anything when replace batteries
 * native integration into Home Assistant
-* native support of BT5.0 by most popular hardware (RPi, NUC)
+* native support of BT5.0 in popular hardware (RPi, NUC)
 * LYWSD03MMC can be even cheaper than available 433.92 MHz sensors
-* compact size
+* compact size.
 
 
 
