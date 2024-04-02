@@ -17,37 +17,6 @@ Flashed with this custom Tasmota firmware your ESP8266/ESP32 device obtain new f
 This project uses the [Nexus_Decoder library](https://github.com/phpcoder/temperature-humidity-sensor-arduino) and requires an extra 433.92 MHz receiver connected to one ESP8266/ESP32 GPIO pin. The SRX882 superheterodyne receiver module is recommended to obtain a reliable signal with minimum noise from its DATA pin (pin #5).
 
 
-## UPD Apr 2, 2024
-
-The project sources are updated to Tasmota-13.4.0.
-
-After a few years of use of the 433 MHz wireless temperature-humidity sensors with Home Assistant it was found that relatively cheap products similar to shown above present a number of problems:
-
-* low accuracy and significant spread of absolute values between devices
-* max humidity is limited to 95% with bad accuracy towards the max value
-* short range and bad propagation through popular construction materials
-* low battery lifetime, and extra work with adjusting to new ID after battery change
-* low reliability of readout which, if used as a sensor in heating system, may be problematic.
-
-To circumvent the latter problem an installation of a second sensor can help to improve reliability which makes the whole idea of 433 MHz wireless sensor network not so attractive.
-
-
-### The way to go 
-
-After some trials a better solution to build a temperature-humidity monitoring network for Home Automation system was found. For mission critical temperature monitoring as part of a domestic heating system I can recommend to move away from 433.92 MHz technology to Bluetooth 5.0. I have successfully deployed a network of BT5.0 Xiaomi Mijia LYWSD03MMC temperature sensors flashed with [custom firmware](https://github.com/pvvx/ATC_MiThermometer). Many advantages are found after about a year of use of the LYWSD03MMC devices:
-
-* high accuracy and stability: temp values are reported with 0.01 degree accuracy
-* longer (adjustable) range compared to 433.92 MHz sensors
-* humidity is accurately reported up to 98%
-* longer battery lifetime, about a year compared to 4-6 months of 433.92 MHz sensors
-* no need to change anything when replace batteries
-* native integration into Home Assistant
-* native support of BT5.0 in popular hardware (RPi, NUC)
-* LYWSD03MMC can be even cheaper than available 433.92 MHz sensors
-* compact size.
-
-
-
 
 
 ## Installation and Building the Tasmota Firmware
@@ -120,6 +89,40 @@ Additionally, in both solutions I do not need a transmission capability, only re
 Finally, there are projects offering similar functionality, most notably [OpenMQTTGateway](https://docs.openmqttgateway.com/). I found that OpenMQTTGateway used with Home Assistant attempts to register automatically all available devices it can ever recognize, including those belonging to the nearby households. When batteries in wireless temperature sensors are changed, they change their IDs to another random number, and the amount of automatically registered devices is growing exponentially.
 
 The described project serves as another example of the [custom integration into Tasmota firmware](https://github.com/phpcoder/tasmota-custom-integration). For simplicity it describes only a single protocol gateway. I am planning to publish more examples of 433MHz to MQTT gateways with more supported protocols as used in my HA system.
+
+
+
+
+## UPD Apr 2, 2024
+
+The project sources are updated to Tasmota-13.4.0.
+
+After a few years of use of the 433 MHz wireless temperature-humidity sensors with Home Assistant it was found that relatively cheap products similar to shown above present a number of problems:
+
+* low accuracy and significant spread of absolute values between devices
+* max humidity is limited to 95% with bad accuracy towards the max value
+* short range and bad propagation through popular construction materials
+* low battery lifetime, and extra work with adjusting to new ID after battery change
+* low reliability of readout which, if used as a sensor in heating system, may be problematic.
+
+To circumvent the latter problem an installation of a second sensor can help to improve reliability which makes the whole idea of 433 MHz wireless sensor network not so attractive.
+
+
+### The way to go 
+
+After some trials a better solution to build a temperature-humidity monitoring network for Home Automation system was found. For mission critical temperature monitoring as part of a domestic heating system I can recommend to move away from 433.92 MHz technology to Bluetooth 5.0. I have successfully deployed a network of BT5.0 Xiaomi Mijia LYWSD03MMC temperature sensors flashed with [custom firmware](https://github.com/pvvx/ATC_MiThermometer). Many advantages are found after about a year of use of the LYWSD03MMC devices:
+
+* high accuracy and stability: temp values are reported with 0.01 degree accuracy
+* longer (adjustable) range compared to 433.92 MHz sensors
+* humidity is accurately reported up to 98%
+* longer battery lifetime, about a year compared to 4-6 months of 433.92 MHz sensors
+* no need to change anything when replace batteries
+* native integration into Home Assistant
+* native support of BT5.0 in popular hardware (RPi, NUC)
+* LYWSD03MMC can be even cheaper than available 433.92 MHz sensors
+* compact size.
+
+
 
 
 
