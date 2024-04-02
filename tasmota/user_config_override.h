@@ -71,18 +71,33 @@
 
 
 
-
+// Own drivers include
 #define USE_NEXUS_MQTT
 
 
-// You might even pass some parameters from the command line ----------------------------
-// Ie:  export PLATFORMIO_BUILD_FLAGS='-DUSE_CONFIG_OVERRIDE -DMY_IP="192.168.1.99" -DMY_GW="192.168.1.1" -DMY_DNS="192.168.1.1"'
+/*
+  Error in Tasmota 13.13.0+
+  when compile for esp8266_4M2M
 
-// !!! Remember that your changes GOES AT THE BOTTOM OF THIS FILE right before the last #endif !!!
+  /tasmota/tasmota_xdrv_driver/xdrv_50_filesystem.ino
+  fatal error: ESPFtpServer.h: No such file or directory
 
+  Comment out in tasmota/include/tasmota_configurations.h
+  line 1051
 
+    #ifdef ESP8266_4M
+      #ifndef USE_FTP
+        #define USE_FTP
+      #endif
+      #ifndef USER_FTP
+        #define USER_FTP "user"
+      #endif
+      #ifndef PW_FTP
+        #define PW_FTP "pass"
+      #endif
+    #endif // ESP8266_4M
 
-
+*/
 
 
 #endif  // _USER_CONFIG_OVERRIDE_H_

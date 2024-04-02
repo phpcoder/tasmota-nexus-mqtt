@@ -17,6 +17,35 @@ Flashed with this custom Tasmota firmware your ESP8266/ESP32 device obtain new f
 This project uses the [Nexus_Decoder library](https://github.com/phpcoder/temperature-humidity-sensor-arduino) and requires an extra 433.92 MHz receiver connected to one of the ESP8266/ESP32 GPIO pin. The SRX882 superheterodyne receiver module is recommended to obtain a reliable signal with minimum noise from its DATA pin (pin #5).
 
 
+## UPD Apr 2, 2024
+
+The project sources are updated to Tasmota-13.4.0.
+
+After few years of use of the 433 MHz wireless temperature-humidity sensors it was found that relatively cheap products similar to those shown above used as temperature/humidity monitors in Home Automation system present a number of challenges:
+	- low accuracy and significant spread of absolute values between devices
+	- max humidity is limited to 95% with bad accuracy towards the max value
+	- short range and bad propagation through popular construction materials
+	- low battery lifetime, and extra work with adjusting to new ID after battery change
+	- low reliability of readout which, if used as a sensor in heating system, may be problematic.
+To circumvent the latter problem an installation of a second sensor can help to improve reliability which makes the whole idea of 433 MHz wireless sensor network not so attractive.
+
+### The way to go 
+
+After some trials a better solution to build a temperature-humidity monitoring for Home Automation system was found. For mission critical temperature monitoring for domestic heating system I can recommend to move away from 433.92 MHz technology to Bluetooth 5.0. I have successfully deployed a network of BT5.0 Xiaomi Mijia LYWSD03MMC temperature sensors flashed with [custom firmware](https://github.com/pvvx/ATC_MiThermometer). The advantages found after about a year of use LYWSD03MMC devices:
+	- high accuracy and stability: temp values are reported with 0.01 degree accuracy
+	- longer (adjustable) range compared to 433.92 MHz sensors
+	- humidity is accurately reported up to 98%
+	- longer battery lifetime, about a year compared to 4-6 months of 433.92 MHz sensors
+	- no need to change anything when replace batteries
+	- native integration into Home Assistant
+	- native support of BT5.0 by most popular hardware (RPi, NUC)
+	- LYWSD03MMC can be even cheaper than available 433.92 MHz sensors
+	- compact size
+
+
+
+
+
 ## Installation and Building the Tasmota Firmware
 
 To start with, you need to install [PlatformIO](https://tasmota.github.io/docs/Compile-your-build/#compiling-tools) to your system and clone a Tasmota stable (preferred) branch. The process of making a [custom Tasmota build](https://tasmota.github.io/docs/Compile-your-build/#customize-your-build) is described here in detail with all required custom config files included into this repository:
