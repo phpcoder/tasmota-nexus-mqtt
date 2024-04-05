@@ -27,9 +27,9 @@ To start with, you need to install [PlatformIO](https://tasmota.github.io/docs/C
 	- it is made for [Wemos D1 mini ESP8266 board](https://www.wemos.cc/en/latest/d1/d1_mini_3.1.0.html), for other boards uncomment your specific board type name in `env` section
 	- set your system's serial port connected to your board as `upload_port` parameter used for flashing your board and later for monitoring the serial data
 	- optionally set proper `upload_speed` (and optionally `monitor_speed`)
-* Copy [`/tasmota/user_config_override.h`](https://github.com/phpcoder/tasmota-nexus-mqtt/blob/main/tasmota/user_config_override.h) to the `/tasmota` folder
+* Copy [`/tasmota/user_config_override.h`](https://github.com/phpcoder/tasmota-nexus-mqtt/blob/main/tasmota/user_config_override.h) to the `/tasmota` folder. 
 	- enter your own WiFi/MQTT Broker **credentials**, MQTT Broker **host** and project **name**
-* Copy [`/tasmota/xdrv_103_nexus_mqtt.ino`](https://github.com/phpcoder/tasmota-nexus-mqtt/blob/main/tasmota/xdrv_103_nexus_mqtt.ino) to the `/tasmota` folder
+* Copy [`/tasmota/tasmota_xdrv_driver/xdrv_103_nexus_mqtt.ino`](https://github.com/phpcoder/tasmota-nexus-mqtt/blob/main/tasmota/tasmota_xdrv_driver/xdrv_103_nexus_mqtt.ino) to the `/tasmota/tasmota_xdrv_driver` folder
 	- modify the MQTT topic as required for use with your preferred Home Automation System
 	- check the GPIO pin number where your 433.92 MHz receiver module is connected
 
